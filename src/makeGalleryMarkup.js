@@ -1,36 +1,46 @@
 export const makeGalleryMarkup = hits => {
   return hits
-    .map(hits => {
-      return `
+    .map(
+      ({
+        largeImageURL,
+        webformatURL,
+        tags,
+        likes,
+        views,
+        comments,
+        downloads,
+      }) => {
+        return `
       <div class="photo-card">
-        <a href="${hits.largeImageURL}">
-          <img src="${hits.webformatURL}" alt="${hits.tags}" loading="lazy" width="240" height="240"/>
+        <a href="${largeImageURL}">
+          <img src="${webformatURL}" alt="${tags}" loading="lazy" width="240" height="240"/>
         </a>
         
         <div class="info">
               <div class="info-wraper">
                 <p class="info-item">Likes
-                  <b>${hits.likes}</b>
+                  <b>${likes}</b>
                 </p>
               </div>
               <div class="info-wraper">
                 <p class="info-item">Views
-                  <b>${hits.views}</b>
+                  <b>${views}</b>
                 </p>
               </div>
               <div class="info-wraper">
                 <p class="info-item">Comments
-                  <b>${hits.comments}</b>
+                  <b>${comments}</b>
                 </p>
               </div>
               <div class="info-wraper">
                 <p class="info-item">Downloads
-                  <b>${hits.downloads}</b>
+                  <b>${downloads}</b>
                 </p>
               </div>
             </div>
       </div>
     `;
-    })
+      }
+    )
     .join();
 };
