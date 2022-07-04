@@ -16,35 +16,51 @@ const imageApiService = new ImageApiService();
 refs.form.addEventListener('submit', onFormSubmitClick);
 refs.loadMoreBtn.addEventListener('click', onLoadMoreBtnClick);
 
-function onFormSubmitClick(event) {
+async function onFormSubmitClick(event) {
   event.preventDefault();
 
-  imageApiService.searchQuery = event.currentTarget.elements.searchQuery.value;
-  imageApiService.resetPage();
+  imageApiService.searchQuery =
+    event.currentTarget.elements.searchQuery.value.trim();
 
-  imageApiService
-    .fetchGallery()
-    .then(hits => {
-      console.log(hits);
-      if (hits.length === 0) {
-        return Notiflix.Notify.failure(
-          'Sorry, there are no images matching your search query. Please try again.'
-        );
-      }
-      Notiflix.Notify.success(`Hooray! We found totalHits images.`);
-      clearHitsContainer();
-      appendHitsMarkup(hits);
-      refs.loadMoreBtn.classList.remove('visually-hidden');
-    })
-    .catch(error => {
-      Notiflix.Notify.failure(
+  event.currentTarget.reset();
+  imageApiService.resetPage();
+  try {
+    const { hits, totalHits } = await imageApiService.fetchGallery();
+
+    if (hits.length === 0) {
+      return Notiflix.Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.'
       );
-    });
+    }
+
+    // // const lastPage = await (totalHits / data.per_page < data.page);
+
+    // // btnToggle(lastPage);
+
+    // if (totalHits > (totalHits / data.per_page) % data.page) {
+    //   Notiflix.Notify.info(
+    //     "We're sorry, but you've reached the end of search results."
+    //   );
+    // }
+    Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
+    clearHitsContainer();
+    appendHitsMarkup(hits);
+    refs.loadMoreBtn.classList.remove('visually-hidden');
+
+    console.log(hits);
+  } catch (error) {
+    console.log(error.massage);
+  }
 }
 
-function onLoadMoreBtnClick() {
-  imageApiService.fetchGallery().then(appendHitsMarkup);
+async function onLoadMoreBtnClick() {
+  try {
+    const { hits, totalHits } = await imageApiService.fetchGallery();
+    appendHitsMarkup(hits);
+    Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
+  } catch (error) {
+    console.log(error.massage);
+  }
 }
 
 function appendHitsMarkup(hits) {
@@ -59,3 +75,9 @@ function appendHitsMarkup(hits) {
 function clearHitsContainer() {
   refs.makeMarkup.innerHTML = '';
 }
+
+// function btnToggle(lastPage) {
+//   lastPage
+//     ? more.classList.add('visually-hidden')
+//     : more.classList.remove('visually-hidden');
+// }
