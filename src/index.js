@@ -33,15 +33,6 @@ async function onFormSubmitClick(event) {
       );
     }
 
-    // // const lastPage = await (totalHits / data.per_page < data.page);
-
-    // // btnToggle(lastPage);
-
-    // if (totalHits > (totalHits / data.per_page) % data.page) {
-    //   Notiflix.Notify.info(
-    //     "We're sorry, but you've reached the end of search results."
-    //   );
-    // }
     Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
     clearHitsContainer();
     appendHitsMarkup(hits);
@@ -75,9 +66,3 @@ function appendHitsMarkup(hits) {
 function clearHitsContainer() {
   refs.makeMarkup.innerHTML = '';
 }
-
-// function btnToggle(lastPage) {
-//   lastPage
-//     ? more.classList.add('visually-hidden')
-//     : more.classList.remove('visually-hidden');
-// }
