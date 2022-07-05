@@ -42,5 +42,5 @@ export const makeGalleryMarkup = hits => {
     `;
       }
     )
-    .join();
+    .join('');
 };

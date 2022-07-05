@@ -48,7 +48,13 @@ async function onLoadMoreBtnClick() {
   try {
     const { hits, totalHits } = await imageApiService.fetchGallery();
     appendHitsMarkup(hits);
-    Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
+
+    if (totalHits === 0) {
+      refs.loadMoreBtn.classList.add('visually-hidden');
+      return Notiflix.Notify.failure(
+        "We're sorry, but you've reached the end of search results."
+      );
+    }
   } catch (error) {
     console.log(error.massage);
   }

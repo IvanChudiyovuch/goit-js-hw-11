@@ -1,5 +1,10 @@
 import axios from 'axios';
 
+const API_KEY = '28317670-7d33057fc4b50d7a50d831995';
+
+axios.defaults.baseURL = 'https://pixabay.com/api/';
+// axios.defaults.headers.common['key'] = API_KEY;
+
 export default class ImageApiService {
   constructor() {
     this.galerryImage = '';
@@ -7,15 +12,26 @@ export default class ImageApiService {
   }
 
   async fetchGallery() {
-    const userImageURL = 'https://pixabay.com/api/';
-    const API_KEY = '28317670-7d33057fc4b50d7a50d831995';
+    const params = new URLSearchParams({
+      key: API_KEY,
+      q: `${this.galerryImage}`,
+      image_type: 'photo',
+      orientation: 'horizontal',
+      safesearch: true,
+      page: `${this.page}`,
+      per_page: 40,
+    });
+    const { data } = await axios.get(`?${params}`);
 
-    const { data } = await axios.get(
-      `${userImageURL}?key=${API_KEY}&q=
-      ${this.galerryImage}&image_type=photo&
-      orientation=horizontal&safesearch=true&
-      page=${this.page}&per_page=40`
-    );
+    // const userImageURL = 'https://pixabay.com/api/';
+    // const API_KEY = '28317670-7d33057fc4b50d7a50d831995';
+
+    // const { data } = await axios.get(
+    //   `https://pixabay.com/api/?key=28317670-7d33057fc4b50d7a50d831995&q=
+    //   ${this.galerryImage}&image_type=photo&
+    //   orientation=horizontal&safesearch=true&
+    //   page=${this.page}&per_page=40`
+    // );
     this.page += 1;
     return data;
   }
